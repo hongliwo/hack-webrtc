@@ -16,10 +16,8 @@
 #include <set>
 #include <string>
 #include <utility>
-
 #include <iostream>
 #include <vector>
-
 #include "absl/algorithm/container.h"
 #include "absl/strings/match.h"
 #include "api/media_stream_interface.h"
@@ -163,6 +161,11 @@ std::vector<VideoCodec> GetPayloadTypesAndDefaultCodecs(
 	  }
   }
 
+  for (const auto& format : supported_formats) {
+	  RTC_LOG(LS_WARNING) << "### name: " << format.name;
+  }
+
+  RTC_LOG(LS_WARNING) << "### is_decoder_factory:: " << is_decoder_factory;
   if (is_decoder_factory) {
     AddH264ConstrainedBaselineProfileToSupportedFormats(&supported_formats);
   }

@@ -290,6 +290,7 @@ H265BitstreamParser::Result H265BitstreamParser::ParseNonParameterSetNalu(
   }
 
   last_slice_qp_delta_ = last_slice_qp_delta;
+  //RTC_LOG(LS_ERROR) << "last_slice_qp_delta:" << last_slice_qp_delta;
 
   return kOk;
 }
@@ -393,8 +394,10 @@ bool H265BitstreamParser::GetLastSliceQp(int* qp) const {
   const int parsed_qp = 26 + pps_->pic_init_qp_minus26 + *last_slice_qp_delta_;
   if (parsed_qp < kMinQpValue || parsed_qp > kMaxQpValue) {
     RTC_LOG(LS_ERROR) << "Parsed invalid QP from bitstream.";
-    return false;
+    // pic_init_qp_minus26:6,*last_slice_qp_delta_:28,kMinQpValue:0, kMaxQpValue:51
+	return false;
   }
+  //RTC_LOG(LS_ERROR) << "pic_init_qp_minus26:" << pps_->pic_init_qp_minus26 << ",*last_slice_qp_delta_:" << *last_slice_qp_delta_ << ",kMinQpValue:" << kMinQpValue << ", kMaxQpValue:" << kMaxQpValue; 
   *qp = parsed_qp;
   return true;
 }
