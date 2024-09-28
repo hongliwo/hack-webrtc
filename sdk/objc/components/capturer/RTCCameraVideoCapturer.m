@@ -126,7 +126,11 @@ const int64_t kNanosecondsPerSecond = 1000000000;
                              position:AVCaptureDevicePositionUnspecified];
   return session.devices;
 #else
+// if define __IPHONE_OS_VERSION_MIN_REQUIRED 12000, do not need this
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wdeprecated-declarations"
   return [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+//#pragma clang diagnostic pop
 #endif
 }
 

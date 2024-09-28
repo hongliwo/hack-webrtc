@@ -10,6 +10,13 @@
 
 #import <Foundation/Foundation.h>
 
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#undef __IPHONE_OS_VERSION_MIN_REQUIRED
+#define __IPHONE_OS_VERSION_MIN_REQUIRED 120000
+#endif
+
+
+
 // RTCDisplayLinkTimer wraps a CADisplayLink and is set to fire every two screen
 // refreshes, which should be 30fps. We wrap the display link in order to avoid
 // a retain cycle since CADisplayLink takes a strong reference onto its target.

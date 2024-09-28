@@ -22,6 +22,10 @@
 #import "RTCAudioSessionConfiguration.h"
 #import "base/RTCLogging.h"
 
+//#ifndef ABSL_HAVE_THREAD_LOCAL
+//#define ABSL_HAVE_THREAD_LOCAL 1
+//#endif
+
 #if !defined(ABSL_HAVE_THREAD_LOCAL)
 #error ABSL_HAVE_THREAD_LOCAL should be defined for MacOS / iOS Targets.
 #endif

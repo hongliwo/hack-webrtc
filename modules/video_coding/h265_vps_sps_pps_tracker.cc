@@ -77,7 +77,8 @@ H265VpsSpsPpsTracker::FixedBitstream H265VpsSpsPpsTracker::CopyAndFixBitstream(
             return {kRequestKeyframe};
           }
 
-          pps = pps_data_.find(nalu.pps_id);
+          //pps = pps_data_.find(nalu.pps_id);
+          pps = pps_data_.find(0);
           if (pps == pps_data_.end()) {
             RTC_LOG(LS_WARNING)
                 << "No PPS with id " << nalu.pps_id << " received";
