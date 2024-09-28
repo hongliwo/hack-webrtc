@@ -16,7 +16,8 @@
 #include <set>
 #include <string>
 #include <utility>
-
+#include <iostream>
+#include <vector>
 #include "absl/algorithm/container.h"
 #include "absl/strings/match.h"
 #include "api/media_stream_interface.h"
@@ -147,8 +148,24 @@ std::vector<VideoCodec> GetPayloadTypesAndDefaultCodecs(
     return {};
   }
 
-  std::vector<webrtc::SdpVideoFormat> supported_formats =
+  std::vector<webrtc::SdpVideoFormat> supported_formats_tmp =
       factory->GetSupportedFormats();
+
+  std::unordered_set<std::string> seen_names;
+  std::vector<webrtc::SdpVideoFormat> supported_formats;
+  supported_formats.reserve(supported_formats_tmp.size());
+
+  for (const auto& format_tmp : supported_formats_tmp) {
+	  if (seen_names.insert(format_tmp.name).second) {
+		  supported_formats.push_back(format_tmp);
+	  }
+  }
+
+  for (const auto& format : supported_formats) {
+	  RTC_LOG(LS_WARNING) << "### name: " << format.name;
+  }
+
+  RTC_LOG(LS_WARNING) << "### is_decoder_factory:: " << is_decoder_factory;
   if (is_decoder_factory) {
     AddH264ConstrainedBaselineProfileToSupportedFormats(&supported_formats);
   }
