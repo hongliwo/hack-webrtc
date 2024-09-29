@@ -13,6 +13,7 @@
 #include <utility>
 
 #include "absl/strings/match.h"
+#include "rtc_base/logging.h"
 
 namespace webrtc {
 
@@ -22,7 +23,10 @@ SdpAudioFormat::SdpAudioFormat(SdpAudioFormat&&) = default;
 SdpAudioFormat::SdpAudioFormat(absl::string_view name,
                                int clockrate_hz,
                                size_t num_channels)
-    : name(name), clockrate_hz(clockrate_hz), num_channels(num_channels) {}
+    : name(name), clockrate_hz(clockrate_hz), num_channels(num_channels) {
+
+	RTC_LOG(LS_INFO) << "### audio SdpAudioFormat name:" <<  name << ",clockrate_hz:" << clockrate_hz<<",num_channels:"<<num_channels;
+}
 
 SdpAudioFormat::SdpAudioFormat(absl::string_view name,
                                int clockrate_hz,

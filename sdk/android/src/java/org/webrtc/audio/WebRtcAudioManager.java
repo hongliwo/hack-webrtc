@@ -85,8 +85,9 @@ class WebRtcAudioManager {
   }
 
   private static int getSampleRateForApiLevel(AudioManager audioManager) {
-    String sampleRateString = audioManager.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
-    return (sampleRateString == null) ? DEFAULT_SAMPLE_RATE_HZ : Integer.parseInt(sampleRateString);
+    //String sampleRateString = audioManager.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
+    //return (sampleRateString == null) ? DEFAULT_SAMPLE_RATE_HZ : Integer.parseInt(sampleRateString);
+	return 16000;
   }
 
   // Returns the native output buffer size for low-latency output streams.

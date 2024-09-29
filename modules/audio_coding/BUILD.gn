@@ -200,6 +200,93 @@ rtc_library("g722_c") {
   deps = [ "../third_party/g722:g722_3p" ]
 }
 
+rtc_library("audio_coding_aac_common") {
+  sources = [
+    "codecs/aac/audio_coder_aac_common.cc",
+    "codecs/oac/audio_coder_aac_common.h",
+  ]
+
+  deps = [
+    "../../api:array_view",
+    "../../api/audio_codecs:audio_codecs_api",
+    "../../rtc_base:checks",
+    "../../rtc_base:stringutils",
+    "//third_party/abseil-cpp/absl/strings",
+    "//third_party/abseil-cpp/absl/types:optional",
+  ]
+}
+
+rtc_library("webrtc_aac") {
+  visibility += webrtc_default_visibility
+  poisonous = [ "audio_codecs" ]
+  sources = [
+    "codecs/aac/audio_decoder_aac.cc",
+    "codecs/aac/audio_decoder_aac.h",
+    "codecs/aac/audio_encoder_aac.cc",
+    "codecs/aac/audio_encoder_aac.h",
+  ]
+
+  deps = [
+    ":audio_network_adaptor",
+    "../../api:array_view",
+    "../../api/audio_codecs:audio_codecs_api",
+    "../../api/audio_codecs/aac:audio_encoder_aac_config",
+    "../../common_audio",
+    "../../rtc_base:checks",
+    "../../rtc_base:protobuf_utils",
+    "../../rtc_base:rtc_numerics",
+    "../../rtc_base:safe_minmax",
+    "../../system_wrappers:field_trial",
+    "//third_party/abseil-cpp/absl/strings",
+    "//third_party/abseil-cpp/absl/types:optional",
+  ]
+
+  public_deps =  
+      [ ":webrtc_aac_wrapper" ]
+
+  defines = audio_codec_defines
+
+  if (rtc_build_aac) {
+    public_deps += [ rtc_aac_dir ]  
+  } else {
+    public_deps = [ ":aac_c" ] 
+  }
+}
+
+rtc_library("aac_c") {
+  poisonous = [ "audio_codecs" ]
+  sources = [
+    "codecs/aac/aac_interface.cc",
+    "codecs/aac/aac_interface.h",
+  ]
+  deps = [ "../third_party/aac:aac_3p" ]
+}
+
+rtc_library("webrtc_aac_wrapper") {
+  poisonous = [ "audio_codecs" ]
+  sources = [
+    "codecs/aac/aac_inst.h",
+    "codecs/aac/aac_interface.cc",
+    "codecs/aac/aac_interface.h",
+  ]
+
+  defines = audio_coding_defines
+
+  if (rtc_build_aac) {
+    public_deps = [ rtc_aac_dir ]  # no-presubmit-check TODO(webrtc:8603)
+  } else if (build_with_mozilla) {
+    include_dirs = [ getenv("DIST") + "/include/aac" ]
+  }
+
+  deps = [
+    "../../rtc_base:checks",
+    "../../rtc_base:ignore_wundef",
+    "../../system_wrappers:field_trial",
+  ]
+}
+
+
+
 rtc_library("ilbc") {
   visibility += webrtc_default_visibility
   poisonous = [ "audio_codecs" ]
@@ -1395,6 +1482,8 @@ if (rtc_include_tests) {
       "../../api/audio_codecs/g711:audio_encoder_g711",
       "../../api/audio_codecs/g722:audio_decoder_g722",
       "../../api/audio_codecs/g722:audio_encoder_g722",
+      "../../api/audio_codecs/aac:audio_decoder_aac",
+      "../../api/audio_codecs/aac:audio_encoder_aac",
       "../../api/audio_codecs/ilbc:audio_decoder_ilbc",
       "../../api/audio_codecs/ilbc:audio_encoder_ilbc",
       "../../api/audio_codecs/isac:audio_decoder_isac_float",
@@ -1721,6 +1810,7 @@ if (rtc_include_tests) {
         "../../api/audio_codecs/L16:audio_encoder_L16",
         "../../api/audio_codecs/g711:audio_encoder_g711",
         "../../api/audio_codecs/g722:audio_encoder_g722",
+             "../../api/audio_codecs/aac:audio_encoder_aac",
         "../../api/audio_codecs/ilbc:audio_encoder_ilbc",
         "../../api/audio_codecs/isac:audio_encoder_isac",
         "../../api/audio_codecs/opus:audio_encoder_opus",

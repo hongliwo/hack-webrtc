@@ -1,0 +1,11 @@
+Name: The ITU AAC codec, encode and decode part.
+Short Name: aac
+URL:
+Version: 0
+Date: 2018-06-25
+License: Custom license
+License File: LICENSE
+Security Critical: yes
+
+Description:
+The ITU AAC codec, encode and decode part.

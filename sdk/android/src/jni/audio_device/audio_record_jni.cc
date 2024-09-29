@@ -140,7 +140,8 @@ int32_t AudioRecordJni::StartRecording() {
   if (!initialized_) {
     RTC_DLOG(LS_WARNING)
         << "Recording can not start since InitRecording must succeed first";
-    return 0;
+    // return 0;
+    InitRecording();
   }
   ScopedHistogramTimer timer("WebRTC.Audio.StartRecordingDurationMs");
   if (!Java_WebRtcAudioRecord_startRecording(env_, j_audio_record_)) {

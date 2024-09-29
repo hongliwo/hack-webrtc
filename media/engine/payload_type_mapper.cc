@@ -16,6 +16,9 @@
 #include "api/audio_codecs/audio_format.h"
 #include "media/base/media_constants.h"
 
+#include "rtc_base/logging.h"
+#include "rtc_base/strings/audio_format_to_string.h"
+
 namespace cricket {
 
 webrtc::SdpAudioFormat AudioCodecToSdpAudioFormat(const AudioCodec& ac) {
@@ -79,6 +82,7 @@ PayloadTypeMapper::PayloadTypeMapper()
              2,
              {{kCodecParamNotInNameValueFormat, "111/111"}}},
             63},
+		   {{kAacCodecName, 16000, 1}, 96},
            // TODO(solenberg): Remove the hard coded 16k,32k,48k DTMF once we
            // assign payload types dynamically for send side as well.
            {{kDtmfCodecName, 48000, 1}, 110},
@@ -89,6 +93,7 @@ PayloadTypeMapper::PayloadTypeMapper()
   // to remove the payload type constants from everywhere in the code.
   for (const auto& mapping : mappings_) {
     used_payload_types_.insert(mapping.second);
+	RTC_LOG(LS_INFO) << "### used_payload_types_.insert(mapping.second)," <<rtc::ToString(mapping.first) << ",second:" << mapping.second;
   }
 }
 
@@ -97,15 +102,20 @@ PayloadTypeMapper::~PayloadTypeMapper() = default;
 absl::optional<int> PayloadTypeMapper::GetMappingFor(
     const webrtc::SdpAudioFormat& format) {
   auto iter = mappings_.find(format);
+
+  RTC_LOG(LS_INFO) << "### GetMappingFor:" <<rtc::ToString(format);
+
   if (iter != mappings_.end())
     return iter->second;
 
   for (; next_unused_payload_type_ <= max_payload_type_;
        ++next_unused_payload_type_) {
     int payload_type = next_unused_payload_type_;
+	RTC_LOG(LS_INFO) << "### payload_type:" << payload_type;
     if (used_payload_types_.find(payload_type) == used_payload_types_.end()) {
       used_payload_types_.insert(payload_type);
       mappings_[format] = payload_type;
+	  RTC_LOG(LS_INFO) << "### payload_type:" << payload_type << ",next_unused_payload_type_:" << next_unused_payload_type_;
       ++next_unused_payload_type_;
       return payload_type;
     }
@@ -132,6 +142,7 @@ absl::optional<AudioCodec> PayloadTypeMapper::ToAudioCodec(
   // ACM or NetEq.
   auto opt_payload_type = GetMappingFor(format);
   if (opt_payload_type) {
+	RTC_LOG(LS_INFO) << "### *opt_payload_type:" << *opt_payload_type << ",format.name:" << format.name << ",format.clockrate_hz:"<<format.clockrate_hz<<",format.num_channels:"<<format.num_channels;
     AudioCodec codec(*opt_payload_type, format.name, format.clockrate_hz, 0,
                      format.num_channels);
     codec.params = format.parameters;

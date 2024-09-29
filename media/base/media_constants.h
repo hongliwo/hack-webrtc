@@ -53,6 +53,7 @@ extern const char kPcmuCodecName[];
 extern const char kPcmaCodecName[];
 extern const char kCnCodecName[];
 extern const char kDtmfCodecName[];
+extern const char kAacCodecName[];
 
 // Attribute parameters
 extern const char kCodecParamPTime[];

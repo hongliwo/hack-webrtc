@@ -28,6 +28,7 @@ const NSString * const kRTCIlbcCodecName = @(cricket::kIlbcCodecName);
 const NSString * const kRTCPcmuCodecName = @(cricket::kPcmuCodecName);
 const NSString * const kRTCPcmaCodecName = @(cricket::kPcmaCodecName);
 const NSString * const kRTCDtmfCodecName = @(cricket::kDtmfCodecName);
+const NSString * const kRTCAacCodecName = @(cricket::kAacCodecName);
 const NSString * const kRTCComfortNoiseCodecName =
     @(cricket::kComfortNoiseCodecName);
 const NSString * const kRTCVp8CodecName = @(cricket::kVp8CodecName);

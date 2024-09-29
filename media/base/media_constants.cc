@@ -52,6 +52,7 @@ const char kPcmuCodecName[] = "PCMU";
 const char kPcmaCodecName[] = "PCMA";
 const char kCnCodecName[] = "CN";
 const char kDtmfCodecName[] = "telephone-event";
+const char kAacCodecName[] = "AAC";
 
 // draft-spittka-payload-rtp-opus-03.txt
 const char kCodecParamPTime[] = "ptime";

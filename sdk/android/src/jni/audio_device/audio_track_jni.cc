@@ -134,7 +134,8 @@ int32_t AudioTrackJni::StartPlayout() {
   if (!initialized_) {
     RTC_DLOG(LS_WARNING)
         << "Playout can not start since InitPlayout must succeed first";
-    return 0;
+    // return 0;
+    InitPlayout();
   }
   if (!Java_WebRtcAudioTrack_startPlayout(env_, j_audio_track_)) {
     RTC_LOG(LS_ERROR) << "StartPlayout failed";
