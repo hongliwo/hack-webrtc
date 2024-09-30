@@ -31,7 +31,7 @@ namespace webrtc {
 
 namespace {
 
-constexpr size_t kDecoderFrameMemoryLength = 10;
+constexpr size_t kDecoderFrameMemoryLength = 256;//10;
 
 }
 
@@ -120,7 +120,9 @@ void VCMDecodedFrameCallback::Decoded(VideoFrame& decodedImage,
   if (!frame_info) {
     RTC_LOG(LS_WARNING) << "Too many frames backed up in the decoder, dropping "
                            "frame with timestamp "
-                        << decodedImage.timestamp();
+                        << decodedImage.timestamp()
+						<< ", kDecoderFrameMemoryLength "
+						<< kDecoderFrameMemoryLength;
     return;
   }
 
@@ -228,9 +230,17 @@ void VCMDecodedFrameCallback::ClearTimestampMap() {
   int dropped_frames = 0;
   {
     MutexLock lock(&lock_);
+#if 0
     dropped_frames = frame_infos_.size();
     frame_infos_.clear();
+#else
+	if(frame_infos_.size() > 0) {
+        frame_infos_.pop_front();
+		dropped_frames = 1;
+	}
+#endif
   }
+
   if (dropped_frames > 0) {
     _receiveCallback->OnDroppedFrames(dropped_frames);
   }

@@ -113,6 +113,7 @@ int32_t VideoDecoderWrapper::Decode(
   {
     MutexLock lock(&frame_extra_infos_lock_);
     frame_extra_infos_.push_back(frame_extra_info);
+	//RTC_LOG(LS_WARNING) << "### frame_extra_info.timestamp_ns push:" << frame_extra_info.timestamp_ns << ",input_image.capture_time_ms_:" << input_image.capture_time_ms_ << ",rtc::kNumNanosecsPerMillisec:" << rtc::kNumNanosecsPerMillisec;
   }
 
   JNIEnv* env = AttachCurrentThreadIfNeeded();
@@ -171,6 +172,7 @@ void VideoDecoderWrapper::OnDecodedFrame(
 
       frame_extra_info = frame_extra_infos_.front();
       frame_extra_infos_.pop_front();
+	  //RTC_LOG(LS_WARNING) << "### frame_extra_info.timestamp_ns:" << frame_extra_info.timestamp_ns << ",timestamp_ns:" << timestamp_ns;
       // If the decoder might drop frames so iterate through the queue until we
       // find a matching timestamp.
     } while (frame_extra_info.timestamp_ns != timestamp_ns);
