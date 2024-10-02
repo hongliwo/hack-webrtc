@@ -182,6 +182,7 @@ declare_args() {
   # bugs.webrtc.org/9213#c13 for more info.
   rtc_use_h264 = true
     # proprietary_codecs && !is_android && !is_ios && !(is_win && !is_clang)
+  rtc_use_h265 = true
 
   # Enable this flag to make webrtc::Mutex be implemented by absl::Mutex.
   rtc_use_absl_mutex = false

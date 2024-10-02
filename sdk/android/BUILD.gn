@@ -47,6 +47,7 @@ if (is_android) {
       ":libjingle_peerconnection_java",
       ":libjingle_peerconnection_metrics_default_java",
       ":libh264_java",
+      ":libh265_java",
       ":libvpx_vp8_java",
       ":libvpx_vp9_java",
       ":logging_java",
@@ -508,6 +509,19 @@ if (is_android) {
     ]
   }
 
+  rtc_android_library("libh265_java") {
+    visibility = [ "*" ]
+    sources = [
+      "api/org/webrtc/LibH265Decoder.java",
+      "api/org/webrtc/LibH265Encoder.java",
+    ]
+    deps = [
+      ":base_java",
+      ":video_api_java",
+      ":video_java",
+      "//rtc_base:base_java",
+    ]
+  }
 
   rtc_android_library("libvpx_vp9_java") {
     visibility = [ "*" ]
@@ -552,6 +566,7 @@ if (is_android) {
       ":dav1d_java",
       ":libaom_av1_encoder_java",
       ":libh264_java",
+      ":libh265_java",
       ":libvpx_vp8_java",
       ":libvpx_vp9_java",
       ":video_api_java",
@@ -883,6 +898,20 @@ if (current_os == "linux" || is_android) {
     ]
   }
 
+  rtc_library("libh265_jni") {
+    visibility = [ "*" ]
+    allow_poison = [ "software_video_codecs" ]
+    sources = [ "src/jni/h265_codec.cc" ]
+    deps = [
+      ":base_jni",
+      ":generated_libh265_jni",
+      ":video_jni",
+      "../../modules/video_coding:webrtc_h265",
+    ]
+  }
+
+
+
   rtc_library("libvpx_vp9_jni") {
     visibility = [ "*" ]
     allow_poison = [ "software_video_codecs" ]
@@ -924,6 +953,7 @@ if (current_os == "linux" || is_android) {
     allow_poison = [ "software_video_codecs" ]
     deps = [
       ":libh264_jni",
+      ":libh265_jni",
       ":libvpx_vp8_jni",
       ":libvpx_vp9_jni",
     ]
@@ -1388,7 +1418,15 @@ if (current_os == "linux" || is_android) {
     jni_generator_include = "//sdk/android/src/jni/jni_generator_helper.h"
   }
 
+  generate_jni("generated_libh265_jni") {
+    sources = [
+      "api/org/webrtc/LibH265Decoder.java",
+      "api/org/webrtc/LibH265Encoder.java",
+    ]
 
+    namespace = "webrtc::jni"
+    jni_generator_include = "//sdk/android/src/jni/jni_generator_helper.h"
+  }
 
   generate_jni("generated_libvpx_vp9_jni") {
     sources = [

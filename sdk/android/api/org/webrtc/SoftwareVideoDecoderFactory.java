@@ -31,6 +31,11 @@ public class SoftwareVideoDecoderFactory implements VideoDecoderFactory {
       return new LibH264Decoder();
     }
 
+	if (codecName.equalsIgnoreCase(VideoCodecMimeType.H265.name())) {
+		Log.d(TAG, "### Creating decoder for codec: " + codecName + ",VideoCodecMimeType.H265.name(): " + VideoCodecMimeType.H265.name());
+      return new LibH265Decoder();
+    }
+
     if (codecName.equalsIgnoreCase(VideoCodecMimeType.VP8.name())) {
 		Log.d(TAG, "### Creating decoder for codec: " + codecName + ",VideoCodecMimeType.VP8.name(): " + VideoCodecMimeType.VP8.name());
       return new LibvpxVp8Decoder();
@@ -57,6 +62,7 @@ public class SoftwareVideoDecoderFactory implements VideoDecoderFactory {
     List<VideoCodecInfo> codecs = new ArrayList<VideoCodecInfo>();
 
     codecs.add(new VideoCodecInfo(VideoCodecMimeType.H264.name(), new HashMap<>()));
+    codecs.add(new VideoCodecInfo(VideoCodecMimeType.H265.name(), new HashMap<>()));
     codecs.add(new VideoCodecInfo(VideoCodecMimeType.VP8.name(), new HashMap<>()));
     if (LibvpxVp9Decoder.nativeIsSupported()) {
       codecs.add(new VideoCodecInfo(VideoCodecMimeType.VP9.name(), new HashMap<>()));
