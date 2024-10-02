@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.
+ *  Copyright (c) 2024 The WebRTC project authors. All Rights Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
@@ -24,15 +24,17 @@
 #include <memory>
 #include <vector>
 
+extern "C" {
+#include <libavcodec/avcodec.h>
+#include <libavutil/opt.h>
+}
+
 #include "api/video/i420_buffer.h"
 #include "api/video_codecs/video_encoder.h"
 #include "common_video/h265/h265_bitstream_parser.h"
 #include "modules/video_coding/codecs/h265/include/h265.h"
 #include "modules/video_coding/svc/scalable_video_controller.h"
 #include "modules/video_coding/utility/quality_scaler.h"
-#include "third_party/openh265/src/codec/api/svc/codec_app_def.h"
-
-class ISVCEncoder;
 
 namespace webrtc {
 
@@ -86,15 +88,15 @@ class H265EncoderImpl : public H265Encoder {
   }
 
  private:
-  SEncParamExt CreateEncoderParams(size_t i) const;
 
   webrtc::H265BitstreamParser h265_bitstream_parser_;
   // Reports statistics with histograms.
   void ReportInit();
   void ReportError();
 
-  std::vector<ISVCEncoder*> encoders_;
-  std::vector<SSourcePicture> pictures_;
+	std::vector<AVCodecContext*> encoders_;
+	std::vector<AVFrame*> av_frames_;
+	std::vector<AVPacket*> av_packets_;
   std::vector<rtc::scoped_refptr<I420Buffer>> downscaled_buffers_;
   std::vector<LayerConfig> configurations_;
   std::vector<EncodedImage> encoded_images_;

@@ -16,7 +16,7 @@
 
 #ifndef DISABLE_H265
 
-#include "modules/video_coding/codecs/h264/include/h264_globals.h"
+//#include "modules/video_coding/codecs/h264/include/h264_globals.h"
 
 namespace webrtc {
 

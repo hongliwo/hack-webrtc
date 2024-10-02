@@ -594,7 +594,7 @@ int32_t H265DecoderImpl::Decode(const EncodedImage& input_image,
 }
 
 const char* H265DecoderImpl::ImplementationName() const {
-  return "FFmpeg H265";
+  return "FFmpeg";
 }
 
 bool H265DecoderImpl::IsInitialized() const {

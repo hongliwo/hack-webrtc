@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2023 The WebRTC project authors. All Rights Reserved.
+ *  Copyright (c) 2024 The WebRTC project authors. All Rights Reserved.
  * 
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
@@ -67,9 +67,7 @@ SdpVideoFormat CreateH265Format(H265Profile profile,
 			cricket::kH265CodecName,
 			{{cricket::kH265FmtpProfileSpace, "0"},
 			{cricket::kH265FmtpProfileId, std::to_string(static_cast<int>(profile))},
-			{cricket::kH265FmtpLevelId, std::to_string(static_cast<int>(level))},
-			{cricket::kH265FmtpTierFlag, "0"},
-			{cricket::kH265FmtpPacketizationMode, packetization_mode}},
+			{cricket::kH265FmtpLevelId, std::to_string(static_cast<int>(level))}},
 			scalability_modes);
 }
 
@@ -83,7 +81,15 @@ std::vector<SdpVideoFormat> SupportedH265Codecs(bool add_scalability_modes) {
 	TRACE_EVENT0("webrtc", __func__);
 	if (!IsH265CodecSupported())
 		return std::vector<SdpVideoFormat>();
-
+  // We only support encoding Constrained Baseline Profile (CBP), but the
+  // decoder supports more profiles. We can list all profiles here that are
+  // supported by the decoder and that are also supersets of CBP, i.e. the
+  // decoder for that profile is required to be able to decode CBP. This means
+  // we can encode and send CBP even though we negotiated a potentially
+  // higher profile. See the H265 spec for more information.
+  //
+  // We support both packetization modes 0 (mandatory) and 1 (optional,
+  // preferred).
 	return {CreateH265Format(H265Profile::kProfileMain, H265Level::kLevel3_1,
 			"1", add_scalability_modes),
 		   CreateH265Format(H265Profile::kProfileMain, H265Level::kLevel3_1,
