@@ -1467,6 +1467,7 @@ bool WebRtcVideoChannel::AddRecvStream(const StreamParams& sp,
   if (unsignaled_frame_transformer_ && !config.frame_transformer)
     config.frame_transformer = unsignaled_frame_transformer_;
 
+  RTC_LOG(LS_WARNING) << "### will new WebRtcVideoReceiveStream";
   receive_streams_[sp.first_ssrc()] = new WebRtcVideoReceiveStream(
       this, call_, sp, std::move(config), default_stream, recv_codecs_,
       flexfec_config);
@@ -2863,6 +2864,7 @@ WebRtcVideoChannel::WebRtcVideoReceiveStream::WebRtcVideoReceiveStream(
   config_.renderer = this;
   flexfec_config_.payload_type = flexfec_config.payload_type;
 
+  RTC_LOG(LS_WARNING) << "### will WebRtcVideoReceiveStream::WebRtcVideoReceiveStream";
   CreateReceiveStream();
   StartReceiveStream();
 }
@@ -3135,6 +3137,7 @@ void WebRtcVideoChannel::WebRtcVideoReceiveStream::CreateReceiveStream() {
   webrtc::VideoReceiveStreamInterface::Config config = config_.Copy();
   config.rtp.protected_by_flexfec = (flexfec_stream_ != nullptr);
   config.rtp.packet_sink_ = flexfec_stream_;
+  RTC_LOG(LS_WARNING) << "### will CreateVideoReceiveStream in WebRtcVideoReceiveStream";
   stream_ = call_->CreateVideoReceiveStream(std::move(config));
 }
 

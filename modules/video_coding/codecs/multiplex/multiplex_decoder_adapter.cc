@@ -105,13 +105,16 @@ MultiplexDecoderAdapter::~MultiplexDecoderAdapter() {
 }
 
 bool MultiplexDecoderAdapter::Configure(const Settings& settings) {
+	RTC_LOG(LS_INFO) << "### MultiplexDecoderAdapter::Configure not here";
   RTC_DCHECK_EQ(settings.codec_type(), kVideoCodecMultiplex);
   Settings associated_settings = settings;
   associated_settings.set_codec_type(
       PayloadStringToCodecType(associated_format_.name));
   for (size_t i = 0; i < kAlphaCodecStreams; ++i) {
+	RTC_LOG(LS_INFO) << "### MultiplexDecoderAdapter::Configure CreateVideoDecoder";
     std::unique_ptr<VideoDecoder> decoder =
         factory_->CreateVideoDecoder(associated_format_);
+	RTC_LOG(LS_INFO) << "### MultiplexDecoderAdapter::Configure decoder->Configure";
     if (!decoder->Configure(associated_settings)) {
       return false;
     }

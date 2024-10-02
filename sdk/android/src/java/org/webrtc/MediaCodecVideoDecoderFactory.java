@@ -20,6 +20,7 @@ import android.os.Build;
 import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import android.util.Log;
 
 /** Factory for decoders backed by Android MediaCodec API. */
 @SuppressWarnings("deprecation") // API level 16 requires use of deprecated methods.
@@ -46,6 +47,7 @@ class MediaCodecVideoDecoderFactory implements VideoDecoderFactory {
   @Nullable
   @Override
   public VideoDecoder createDecoder(VideoCodecInfo codecType) {
+	  Log.d(TAG, "### createDecoder, codecType: " + codecType.name);
     VideoCodecMimeType type = VideoCodecMimeType.valueOf(codecType.getName());
     MediaCodecInfo info = findCodecForType(type);
 

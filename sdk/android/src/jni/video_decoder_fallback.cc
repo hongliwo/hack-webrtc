@@ -9,6 +9,7 @@
  */
 
 #include <jni.h>
+#include "rtc_base/logging.h"
 
 #include "api/video_codecs/video_decoder_software_fallback_wrapper.h"
 #include "sdk/android/generated_video_jni/VideoDecoderFallback_jni.h"
@@ -22,6 +23,7 @@ static jlong JNI_VideoDecoderFallback_CreateDecoder(
     JNIEnv* jni,
     const JavaParamRef<jobject>& j_fallback_decoder,
     const JavaParamRef<jobject>& j_primary_decoder) {
+	RTC_LOG(LS_WARNING) << "### JNI_VideoDecoderFallback_CreateDecoder";
   std::unique_ptr<VideoDecoder> fallback_decoder =
       JavaToNativeVideoDecoder(jni, j_fallback_decoder);
   std::unique_ptr<VideoDecoder> primary_decoder =

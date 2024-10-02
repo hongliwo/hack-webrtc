@@ -88,12 +88,16 @@ VideoDecoderSoftwareFallbackWrapper::VideoDecoderSoftwareFallbackWrapper(
           hw_decoder_->GetDecoderInfo().implementation_name + ")"),
       callback_(nullptr),
       hw_decoded_frames_since_last_fallback_(0),
-      hw_consequtive_generic_errors_(0) {}
+      hw_consequtive_generic_errors_(0) {
+
+		  RTC_LOG(LS_WARNING) << "### VideoDecoderSoftwareFallbackWrapper: fallback_decoder_->GetDecoderInfo().implementation_name " << fallback_decoder_->GetDecoderInfo().implementation_name << ",hw_decoder_->GetDecoderInfo().implementation_name " << hw_decoder_->GetDecoderInfo().implementation_name;
+	  }
 VideoDecoderSoftwareFallbackWrapper::~VideoDecoderSoftwareFallbackWrapper() =
     default;
 
 bool VideoDecoderSoftwareFallbackWrapper::Configure(const Settings& settings) {
   decoder_settings_ = settings;
+	RTC_LOG(LS_WARNING) << "### VideoDecoderSoftwareFallbackWrapper::Configure";
 
   if (webrtc::field_trial::IsEnabled("WebRTC-Video-ForcedSwDecoderFallback")) {
     RTC_LOG(LS_INFO) << "Forced software decoder fallback enabled.";
@@ -101,6 +105,7 @@ bool VideoDecoderSoftwareFallbackWrapper::Configure(const Settings& settings) {
     return InitFallbackDecoder();
   }
   if (InitHwDecoder()) {
+	RTC_LOG(LS_WARNING) << "### InitHwDecoder";
     return true;
   }
 
@@ -124,6 +129,7 @@ bool VideoDecoderSoftwareFallbackWrapper::InitFallbackDecoder() {
   RTC_DCHECK(decoder_type_ == DecoderType::kNone ||
              decoder_type_ == DecoderType::kHardware);
   RTC_LOG(LS_WARNING) << "Decoder falling back to software decoding.";
+  RTC_LOG(LS_WARNING) << "### codec_type " << decoder_settings_.codec_type();
   if (!fallback_decoder_->Configure(decoder_settings_)) {
     RTC_LOG(LS_ERROR) << "Failed to initialize software-decoder fallback.";
     return false;
@@ -135,9 +141,15 @@ bool VideoDecoderSoftwareFallbackWrapper::InitFallbackDecoder() {
     hw_decoder_->Release();
   }
   decoder_type_ = DecoderType::kFallback;
+  
+  RTC_LOG(LS_WARNING) << "### 1 InitFallbackDecoder: decoder_type_ " << decoder_type_ << ",DecoderType::kFallback " <<DecoderType::kFallback;
 
-  if (callback_)
+  if (callback_) {
+	RTC_LOG(LS_WARNING) << "### RegisterDecodeCompleteCallback start";
     fallback_decoder_->RegisterDecodeCompleteCallback(callback_);
+	RTC_LOG(LS_WARNING) << "### RegisterDecodeCompleteCallback stop";
+  }
+	RTC_LOG(LS_WARNING) << "### 2 InitFallbackDecoder: decoder_type_ " << decoder_type_ << ",DecoderType::kFallback " <<DecoderType::kFallback;
   return true;
 }
 
@@ -146,6 +158,7 @@ void VideoDecoderSoftwareFallbackWrapper::UpdateFallbackDecoderHistograms() {
       "WebRTC.Video.HardwareDecodedFramesBetweenSoftwareFallbacks.";
   // Each histogram needs its own code path for this to work otherwise the
   // histogram names will be mixed up by the optimization that takes place.
+  RTC_LOG(LS_WARNING) << "### UpdateFallbackDecoderHistograms: codec_type_ " << decoder_settings_.codec_type();
   switch (decoder_settings_.codec_type()) {
     case kVideoCodecGeneric:
       RTC_HISTOGRAM_COUNTS_100000(kFallbackHistogramsUmaPrefix + "Generic",
@@ -229,6 +242,7 @@ int32_t VideoDecoderSoftwareFallbackWrapper::Decode(
 int32_t VideoDecoderSoftwareFallbackWrapper::RegisterDecodeCompleteCallback(
     DecodedImageCallback* callback) {
   callback_ = callback;
+  RTC_LOG(LS_WARNING) << "### RegisterDecodeCompleteCallback ";
   return active_decoder().RegisterDecodeCompleteCallback(callback);
 }
 
@@ -257,10 +271,12 @@ int32_t VideoDecoderSoftwareFallbackWrapper::Release() {
 VideoDecoder::DecoderInfo VideoDecoderSoftwareFallbackWrapper::GetDecoderInfo()
     const {
   DecoderInfo info = active_decoder().GetDecoderInfo();
+  RTC_LOG(LS_WARNING) << "### info.implementation_name:" << info.implementation_name;
   if (decoder_type_ == DecoderType::kFallback) {
     // Cached "A (fallback from B)" string.
     info.implementation_name = fallback_implementation_name_;
   }
+  RTC_LOG(LS_WARNING) << "### GetDecoderInfo: " << info.implementation_name;
   return info;
 }
 
@@ -274,7 +290,8 @@ const char* VideoDecoderSoftwareFallbackWrapper::ImplementationName() const {
 }
 
 VideoDecoder& VideoDecoderSoftwareFallbackWrapper::active_decoder() const {
-  return decoder_type_ == DecoderType::kFallback ? *fallback_decoder_
+	RTC_LOG(LS_WARNING) << "### active_decoder decoder_type_ " << decoder_type_ << ", DecoderType::kFallback " << DecoderType::kFallback;
+	return decoder_type_ == DecoderType::kFallback ? *fallback_decoder_
                                                  : *hw_decoder_;
 }
 

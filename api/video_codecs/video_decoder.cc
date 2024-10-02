@@ -14,6 +14,7 @@
 #include "api/video/render_resolution.h"
 #include "api/video/video_codec_type.h"
 #include "rtc_base/checks.h"
+#include "rtc_base/logging.h"
 #include "rtc_base/strings/string_builder.h"
 
 namespace webrtc {
@@ -33,6 +34,7 @@ void DecodedImageCallback::Decoded(VideoFrame& decodedImage,
 VideoDecoder::DecoderInfo VideoDecoder::GetDecoderInfo() const {
   DecoderInfo info;
   info.implementation_name = ImplementationName();
+  RTC_LOG(LS_WARNING) << "### GetDecoderInfo: " << info.implementation_name;
   return info;
 }
 

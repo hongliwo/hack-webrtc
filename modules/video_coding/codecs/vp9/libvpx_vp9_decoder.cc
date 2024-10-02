@@ -381,6 +381,7 @@ VideoDecoder::DecoderInfo LibvpxVp9Decoder::GetDecoderInfo() const {
   DecoderInfo info;
   info.implementation_name = "libvpx";
   info.is_hardware_accelerated = false;
+  RTC_LOG(LS_WARNING) << "### GetDecoderInfo: " << info.implementation_name;
   return info;
 }
 

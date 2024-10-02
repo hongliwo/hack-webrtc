@@ -9,6 +9,7 @@
  */
 
 #include <jni.h>
+#include "rtc_base/logging.h"
 
 #include "modules/video_coding/codecs/av1/dav1d_decoder.h"
 #include "sdk/android/generated_dav1d_jni/Dav1dDecoder_jni.h"
@@ -18,6 +19,7 @@ namespace webrtc {
 namespace jni {
 
 static jlong JNI_Dav1dDecoder_CreateDecoder(JNIEnv* jni) {
+	RTC_LOG(LS_WARNING) << "### JNI_Dav1dDecoder_CreateDecoder";
   return jlongFromPointer(webrtc::CreateDav1dDecoder().release());
 }
 

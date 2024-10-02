@@ -89,6 +89,7 @@ PeerConnectionWrapper::CreateOfferAndSetAsLocal(
   if (!offer) {
     return nullptr;
   }
+  RTC_LOG(LS_WARNING) << "### will SetLocalDescription in peer_connection_wrapper.cc";
   EXPECT_TRUE(SetLocalDescription(CloneSessionDescription(offer.get())));
   return offer;
 }
@@ -121,6 +122,7 @@ PeerConnectionWrapper::CreateAnswerAndSetAsLocal(
   if (!answer) {
     return nullptr;
   }
+  RTC_LOG(LS_WARNING) << "### will SetLocalDescription in peer_connection_wrapper.cc";
   EXPECT_TRUE(SetLocalDescription(CloneSessionDescription(answer.get())));
   return answer;
 }
@@ -147,6 +149,7 @@ bool PeerConnectionWrapper::SetLocalDescription(
     std::string* error_out) {
   return SetSdp(
       [this, &desc](SetSessionDescriptionObserver* observer) {
+  RTC_LOG(LS_WARNING) << "### will SetLocalDescription in peer_connection_wrapper.cc";
         pc()->SetLocalDescription(observer, desc.release());
       },
       error_out);
@@ -206,6 +209,7 @@ bool PeerConnectionWrapper::ExchangeOfferAnswerWith(
   if (!offer) {
     return false;
   }
+  RTC_LOG(LS_WARNING) << "### will SetLocalDescription in peer_connection_wrapper.cc";
   bool set_local_offer =
       SetLocalDescription(CloneSessionDescription(offer.get()));
   EXPECT_TRUE(set_local_offer);
@@ -222,6 +226,7 @@ bool PeerConnectionWrapper::ExchangeOfferAnswerWith(
   if (!answer) {
     return false;
   }
+  RTC_LOG(LS_WARNING) << "### will SetLocalDescription in peer_connection_wrapper.cc";
   bool set_local_answer =
       answerer->SetLocalDescription(CloneSessionDescription(answer.get()));
   EXPECT_TRUE(set_local_answer);

@@ -21,7 +21,10 @@ public class SoftwareVideoEncoderFactory implements VideoEncoderFactory {
   public VideoEncoder createEncoder(VideoCodecInfo codecInfo) {
     String codecName = codecInfo.getName();
 
-    if (codecName.equalsIgnoreCase(VideoCodecMimeType.VP8.name())) {
+    if (codecName.equalsIgnoreCase(VideoCodecMimeType.H264.name())) {
+      return new LibH264Encoder();
+    }
+	if (codecName.equalsIgnoreCase(VideoCodecMimeType.VP8.name())) {
       return new LibvpxVp8Encoder();
     }
     if (codecName.equalsIgnoreCase(VideoCodecMimeType.VP9.name())
@@ -43,6 +46,7 @@ public class SoftwareVideoEncoderFactory implements VideoEncoderFactory {
   static VideoCodecInfo[] supportedCodecs() {
     List<VideoCodecInfo> codecs = new ArrayList<VideoCodecInfo>();
 
+    codecs.add(new VideoCodecInfo(VideoCodecMimeType.H264.name(), new HashMap<>()));
     codecs.add(new VideoCodecInfo(VideoCodecMimeType.VP8.name(), new HashMap<>()));
     if (LibvpxVp9Encoder.nativeIsSupported()) {
       codecs.add(new VideoCodecInfo(VideoCodecMimeType.VP9.name(), new HashMap<>()));

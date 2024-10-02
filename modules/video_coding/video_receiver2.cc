@@ -25,6 +25,7 @@
 #include "modules/video_coding/include/video_coding_defines.h"
 #include "modules/video_coding/timing/timing.h"
 #include "rtc_base/checks.h"
+#include "rtc_base/logging.h"
 #include "rtc_base/trace_event.h"
 #include "system_wrappers/include/clock.h"
 
@@ -60,10 +61,13 @@ void VideoReceiver2::RegisterExternalDecoder(
   RTC_DCHECK_RUN_ON(&decoder_sequence_checker_);
   RTC_DCHECK(decoded_frame_callback_.UserReceiveCallback());
 
+  RTC_LOG(LS_WARNING) << "### RegisterExternalDecoder";
   if (decoder) {
+	  RTC_LOG(LS_WARNING) << "### RegisterExternalDecoder yes";
     RTC_DCHECK(!codec_database_.IsExternalDecoderRegistered(payload_type));
     codec_database_.RegisterExternalDecoder(payload_type, std::move(decoder));
   } else {
+	  RTC_LOG(LS_WARNING) << "### RegisterExternalDecoder no";
     codec_database_.DeregisterExternalDecoder(payload_type);
   }
 }

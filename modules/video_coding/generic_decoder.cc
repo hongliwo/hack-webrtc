@@ -251,6 +251,7 @@ VCMGenericDecoder::VCMGenericDecoder(VideoDecoder* decoder)
       decoder_(decoder),
       _last_keyframe_content_type(VideoContentType::UNSPECIFIED) {
   RTC_DCHECK(decoder_);
+  RTC_LOG(LS_WARNING) << "### VCMGenericDecoder: " << decoder_->GetDecoderInfo().ToString();
 }
 
 VCMGenericDecoder::~VCMGenericDecoder() {
@@ -263,9 +264,11 @@ bool VCMGenericDecoder::Configure(const VideoDecoder::Settings& settings) {
   bool ok = decoder_->Configure(settings);
   decoder_info_ = decoder_->GetDecoderInfo();
   RTC_LOG(LS_INFO) << "Decoder implementation: " << decoder_info_.ToString();
+	RTC_LOG(LS_INFO) << "### Decoder implementation_name: " << decoder_info_.implementation_name << ",codec_type_ " << settings.codec_type();
   if (_callback) {
     _callback->OnDecoderImplementationName(
         decoder_info_.implementation_name.c_str());
+	RTC_LOG(LS_INFO) << "Decoder implementation_name: " << decoder_info_.implementation_name << ",codec_type_ " << settings.codec_type();
   }
   return ok;
 }

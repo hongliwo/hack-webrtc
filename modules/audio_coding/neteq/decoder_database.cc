@@ -181,6 +181,7 @@ void DecoderDatabase::RemoveAll() {
 const DecoderDatabase::DecoderInfo* DecoderDatabase::GetDecoderInfo(
     uint8_t rtp_payload_type) const {
   DecoderMap::const_iterator it = decoders_.find(rtp_payload_type);
+  //RTC_LOG(LS_WARNING) << "### GetDecoderInfo: rtp_payload_type: " << rtp_payload_type;
   if (it == decoders_.end()) {
     // Decoder not found.
     return NULL;

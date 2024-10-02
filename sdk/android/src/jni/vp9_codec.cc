@@ -9,6 +9,7 @@
  */
 
 #include <jni.h>
+#include "rtc_base/logging.h"
 
 #include "modules/video_coding/codecs/vp9/include/vp9.h"
 #include "sdk/android/generated_libvpx_vp9_jni/LibvpxVp9Decoder_jni.h"
@@ -27,6 +28,7 @@ static jboolean JNI_LibvpxVp9Encoder_IsSupported(JNIEnv* jni) {
 }
 
 static jlong JNI_LibvpxVp9Decoder_CreateDecoder(JNIEnv* jni) {
+	RTC_LOG(LS_WARNING) << "### JNI_LibvpxVp9Decoder_CreateDecoder";
   return jlongFromPointer(VP9Decoder::Create().release());
 }
 

@@ -931,6 +931,7 @@ bool VoiceChannel::SetRemoteContent_w(const MediaContentDescription* content,
   }
   last_send_params_ = send_params;
 
+  RTC_DLOG(LS_INFO) << "### will UpdateRemoteStreams_w";
   return UpdateRemoteStreams_w(content, type, error_desc);
 }
 
@@ -1110,7 +1111,7 @@ bool VideoChannel::SetRemoteContent_w(const MediaContentDescription* content,
     }
     last_recv_params_ = recv_params;
   }
-
+  RTC_DLOG(LS_INFO) << "### will UpdateRemoteStreams_w";
   return UpdateRemoteStreams_w(content, type, error_desc);
 }
 

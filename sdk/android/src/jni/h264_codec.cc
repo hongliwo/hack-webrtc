@@ -11,21 +11,21 @@
 #include <jni.h>
 #include "rtc_base/logging.h"
 
-#include "modules/video_coding/codecs/vp8/include/vp8.h"
-#include "sdk/android/generated_libvpx_vp8_jni/LibvpxVp8Decoder_jni.h"
-#include "sdk/android/generated_libvpx_vp8_jni/LibvpxVp8Encoder_jni.h"
+#include "modules/video_coding/codecs/h264/include/h264.h"
+#include "sdk/android/generated_libh264_jni/LibH264Decoder_jni.h"
+#include "sdk/android/generated_libh264_jni/LibH264Encoder_jni.h"
 #include "sdk/android/src/jni/jni_helpers.h"
 
 namespace webrtc {
 namespace jni {
 
-static jlong JNI_LibvpxVp8Encoder_CreateEncoder(JNIEnv* jni) {
-  return jlongFromPointer(VP8Encoder::Create().release());
+static jlong JNI_LibH264Encoder_CreateEncoder(JNIEnv* jni) {
+  return jlongFromPointer(H264Encoder::Create().release());
 }
 
-static jlong JNI_LibvpxVp8Decoder_CreateDecoder(JNIEnv* jni) {
-	RTC_LOG(LS_WARNING) << "### JNI_LibvpxVp8Decoder_CreateDecoder";
-  return jlongFromPointer(VP8Decoder::Create().release());
+static jlong JNI_LibH264Decoder_CreateDecoder(JNIEnv* jni) {
+	RTC_LOG(LS_WARNING) << "### JNI_LibH264Decoder_CreateDecoder";
+  return jlongFromPointer(H264Decoder::Create().release());
 }
 
 }  // namespace jni

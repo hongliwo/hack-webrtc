@@ -603,6 +603,7 @@ static void JNI_PeerConnection_SetLocalDescriptionAutomatically(
     const JavaParamRef<jobject>& j_observer) {
   auto observer =
       rtc::make_ref_counted<SetLocalSdpObserverJni>(jni, j_observer);
+  RTC_LOG(LS_WARNING) << "### will SetLocalDescription in sdk/android/src/jni/pc/peer_connection.cc";
   ExtractNativePC(jni, j_pc)->SetLocalDescription(observer);
 }
 
@@ -613,6 +614,7 @@ static void JNI_PeerConnection_SetLocalDescription(
     const JavaParamRef<jobject>& j_sdp) {
   auto observer =
       rtc::make_ref_counted<SetLocalSdpObserverJni>(jni, j_observer);
+  RTC_LOG(LS_WARNING) << "### will SetLocalDescription in sdk/android/src/jni/pc/peer_connection.cc yes";
   ExtractNativePC(jni, j_pc)->SetLocalDescription(
       JavaToNativeSessionDescription(jni, j_sdp), observer);
 }

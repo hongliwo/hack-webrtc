@@ -84,6 +84,9 @@ VideoDecoder* VideoStreamDecoderImpl::GetDecoder(int payload_type) {
     return decoder_.get();
   }
 
+  RTC_LOG(LS_WARNING) << "### GetDecoder Payload type " << payload_type;
+
+
   current_payload_type_.reset();
   decoder_.reset();
 
@@ -95,6 +98,7 @@ VideoDecoder* VideoStreamDecoderImpl::GetDecoder(int payload_type) {
   }
 
   const SdpVideoFormat& video_format = decoder_settings_it->second.first;
+  RTC_LOG(LS_WARNING) << "### will CreateVideoDecoder";
   std::unique_ptr<VideoDecoder> decoder =
       decoder_factory_->CreateVideoDecoder(video_format);
   if (!decoder) {

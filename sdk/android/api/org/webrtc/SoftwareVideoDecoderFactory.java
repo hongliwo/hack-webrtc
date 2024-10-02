@@ -14,21 +14,34 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import android.util.Log;
+
 
 public class SoftwareVideoDecoderFactory implements VideoDecoderFactory {
+	private static final String TAG = "SoftwareVideoDecoderFactory";
   @Nullable
   @Override
   public VideoDecoder createDecoder(VideoCodecInfo codecInfo) {
     String codecName = codecInfo.getName();
 
+	Log.d(TAG, "### Creating decoder for codec: " + codecName);
+
+	if (codecName.equalsIgnoreCase(VideoCodecMimeType.H264.name())) {
+		Log.d(TAG, "### Creating decoder for codec: " + codecName + ",VideoCodecMimeType.H264.name(): " + VideoCodecMimeType.H264.name());
+      return new LibH264Decoder();
+    }
+
     if (codecName.equalsIgnoreCase(VideoCodecMimeType.VP8.name())) {
+		Log.d(TAG, "### Creating decoder for codec: " + codecName + ",VideoCodecMimeType.VP8.name(): " + VideoCodecMimeType.VP8.name());
       return new LibvpxVp8Decoder();
     }
     if (codecName.equalsIgnoreCase(VideoCodecMimeType.VP9.name())
         && LibvpxVp9Decoder.nativeIsSupported()) {
+		Log.d(TAG, "### Creating decoder for codec: " + codecName + ",VideoCodecMimeType.VP9.name(): " + VideoCodecMimeType.VP9.name());
       return new LibvpxVp9Decoder();
     }
     if (codecName.equalsIgnoreCase(VideoCodecMimeType.AV1.name())) {
+		Log.d(TAG, "### Creating decoder for codec: " + codecName + ",VideoCodecMimeType.AV1.name(): " + VideoCodecMimeType.AV1.name());
       return new Dav1dDecoder();
     }
 
@@ -43,6 +56,7 @@ public class SoftwareVideoDecoderFactory implements VideoDecoderFactory {
   static VideoCodecInfo[] supportedCodecs() {
     List<VideoCodecInfo> codecs = new ArrayList<VideoCodecInfo>();
 
+    codecs.add(new VideoCodecInfo(VideoCodecMimeType.H264.name(), new HashMap<>()));
     codecs.add(new VideoCodecInfo(VideoCodecMimeType.VP8.name(), new HashMap<>()));
     if (LibvpxVp9Decoder.nativeIsSupported()) {
       codecs.add(new VideoCodecInfo(VideoCodecMimeType.VP9.name(), new HashMap<>()));

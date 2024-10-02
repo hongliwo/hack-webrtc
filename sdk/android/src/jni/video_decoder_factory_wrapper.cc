@@ -34,6 +34,7 @@ std::unique_ptr<VideoDecoder> VideoDecoderFactoryWrapper::CreateVideoDecoder(
       SdpVideoFormatToVideoCodecInfo(jni, format);
   ScopedJavaLocalRef<jobject> decoder = Java_VideoDecoderFactory_createDecoder(
       jni, decoder_factory_, j_codec_info);
+  RTC_LOG(LS_WARNING) << "### CreateVideoDecoder, format.name: " << format.name;
   if (!decoder.obj())
     return nullptr;
   return JavaToNativeVideoDecoder(jni, decoder);

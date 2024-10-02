@@ -13,6 +13,7 @@ package org.webrtc;
 import androidx.annotation.Nullable;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import android.util.Log;
 
 /**
  * Helper class that combines HW and SW decoders.
@@ -21,7 +22,7 @@ public class DefaultVideoDecoderFactory implements VideoDecoderFactory {
   private final VideoDecoderFactory hardwareVideoDecoderFactory;
   private final VideoDecoderFactory softwareVideoDecoderFactory = new SoftwareVideoDecoderFactory();
   private final @Nullable VideoDecoderFactory platformSoftwareVideoDecoderFactory;
-
+  private static String TAG = "DefaultVideoDecoderFactory";
   /**
    * Create decoder factory using default hardware decoder factory.
    */
@@ -40,6 +41,7 @@ public class DefaultVideoDecoderFactory implements VideoDecoderFactory {
 
   @Override
   public @Nullable VideoDecoder createDecoder(VideoCodecInfo codecType) {
+	  Log.d(TAG, "### createDecoder, codecType: " + codecType.name);
     VideoDecoder softwareDecoder = softwareVideoDecoderFactory.createDecoder(codecType);
     final VideoDecoder hardwareDecoder = hardwareVideoDecoderFactory.createDecoder(codecType);
     if (softwareDecoder == null && platformSoftwareVideoDecoderFactory != null) {

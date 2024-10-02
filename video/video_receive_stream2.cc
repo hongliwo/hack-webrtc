@@ -404,12 +404,14 @@ void VideoReceiveStream2::Start() {
       if (decoders_count >= maximum_pre_stream_decoders_) {
         break;
       }
+	  RTC_LOG(LS_WARNING) << "### will CreateAndRegisterExternalDecoder";
       CreateAndRegisterExternalDecoder(decoder);
       ++decoders_count;
     }
 
     decoder_stopped_ = false;
   });
+  RTC_LOG(LS_WARNING) << "### will StartNextDecode";
   buffer_->StartNextDecode(true);
   decoder_running_ = true;
 
@@ -586,6 +588,7 @@ void VideoReceiveStream2::CreateAndRegisterExternalDecoder(
     const Decoder& decoder) {
   TRACE_EVENT0("webrtc",
                "VideoReceiveStream2::CreateAndRegisterExternalDecoder");
+  RTC_LOG(LS_WARNING) << "### will CreateVideoDecoder";
   std::unique_ptr<VideoDecoder> video_decoder =
       config_.decoder_factory->CreateVideoDecoder(decoder.video_format);
   // If we still have no valid decoder, we have to create a "Null" decoder
@@ -808,6 +811,7 @@ bool VideoReceiveStream2::SetMinimumPlayoutDelay(int delay_ms) {
 }
 
 void VideoReceiveStream2::OnEncodedFrame(std::unique_ptr<EncodedFrame> frame) {
+	  RTC_LOG(LS_WARNING) << "### OnEncodedFrame";
   RTC_DCHECK_RUN_ON(&packet_sequence_checker_);
   Timestamp now = clock_->CurrentTime();
   const bool keyframe_request_is_due =
@@ -860,6 +864,7 @@ void VideoReceiveStream2::OnEncodedFrame(std::unique_ptr<EncodedFrame> frame) {
                    HandleKeyFrameGeneration(received_frame_is_keyframe, now,
                                             result.force_request_key_frame,
                                             keyframe_request_is_due);
+				   RTC_LOG(LS_WARNING) << "### will StartNextDecode";
                    buffer_->StartNextDecode(keyframe_required_);
                  }));
   });
@@ -889,6 +894,7 @@ void VideoReceiveStream2::OnDecodableFrameTimeout(TimeDelta wait) {
     RequestKeyFrame(now);
   }
 
+  RTC_LOG(LS_WARNING) << "### will StartNextDecode";
   buffer_->StartNextDecode(keyframe_required_);
 }
 
@@ -906,6 +912,7 @@ VideoReceiveStream2::HandleEncodedFrameOnDecodeQueue(
     // Look for the decoder with this payload type.
     for (const Decoder& decoder : config_.decoders) {
       if (decoder.payload_type == frame->PayloadType()) {
+		  RTC_LOG(LS_WARNING) << "### will CreateAndRegisterExternalDecoder yes";
         CreateAndRegisterExternalDecoder(decoder);
         break;
       }

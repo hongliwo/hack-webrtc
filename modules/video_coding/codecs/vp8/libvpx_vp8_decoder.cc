@@ -26,6 +26,7 @@
 #include "modules/video_coding/codecs/vp8/include/vp8.h"
 #include "modules/video_coding/include/video_error_codes.h"
 #include "rtc_base/checks.h"
+#include "rtc_base/logging.h"
 #include "rtc_base/numerics/exp_filter.h"
 #include "rtc_base/time_utils.h"
 #include "system_wrappers/include/field_trial.h"
@@ -375,6 +376,7 @@ VideoDecoder::DecoderInfo LibvpxVp8Decoder::GetDecoderInfo() const {
   DecoderInfo info;
   info.implementation_name = "libvpx";
   info.is_hardware_accelerated = false;
+  RTC_LOG(LS_WARNING) << "### GetDecoderInfo: " << info.implementation_name;
   return info;
 }
 

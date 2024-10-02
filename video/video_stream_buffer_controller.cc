@@ -152,6 +152,7 @@ absl::optional<int64_t> VideoStreamBufferController::InsertFrame(
     if (complete_units < buffer_->GetTotalNumberOfContinuousTemporalUnits()) {
       stats_proxy_->OnCompleteFrame(metadata.is_keyframe, metadata.size,
                                     metadata.contentType);
+	  RTC_LOG(LS_WARNING) << "### will MaybeScheduleFrameForRelease";
       MaybeScheduleFrameForRelease();
     }
   }
@@ -180,6 +181,7 @@ void VideoStreamBufferController::StartNextDecode(bool keyframe_required) {
     timeout_tracker_.SetWaitingForKeyframe();
   }
   decoder_ready_for_new_frame_ = true;
+  //RTC_LOG(LS_WARNING) << "### will MaybeScheduleFrameForRelease yes";
   MaybeScheduleFrameForRelease();
 }
 
@@ -252,6 +254,7 @@ void VideoStreamBufferController::OnFrameReady(
   timing_->SetLastDecodeScheduledTimestamp(now);
 
   decoder_ready_for_new_frame_ = false;
+  RTC_LOG(LS_WARNING) << "### will OnEncodedFrame yes";
   receiver_->OnEncodedFrame(std::move(frame));
 }
 
@@ -277,6 +280,7 @@ void VideoStreamBufferController::FrameReadyForDecode(uint32_t rtp_timestamp,
       << "Frame buffer's next decodable frame was not the one sent for "
          "extraction rtp="
       << rtp_timestamp << " extracted rtp=" << frames[0]->Timestamp();
+  RTC_LOG(LS_WARNING) << "### will OnFrameReady";
   OnFrameReady(std::move(frames), render_time);
 }
 
@@ -327,6 +331,7 @@ void VideoStreamBufferController::ForceKeyFrameReleaseImmediately()
     if (next_frame.front()->is_keyframe()) {
       auto render_time = timing_->RenderTime(next_frame.front()->Timestamp(),
                                              clock_->CurrentTime());
+	  RTC_LOG(LS_WARNING) << "### will OnFrameReady";
       OnFrameReady(std::move(next_frame), render_time);
       return;
     }

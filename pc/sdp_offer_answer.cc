@@ -870,6 +870,7 @@ class SdpOfferAnswerHandler::RemoteDescriptionOperation {
 
   bool UpdateSessionState() {
     RTC_DCHECK(ok());
+	RTC_LOG(LS_WARNING) << "### will UpdateSessionState in sdp_offer_answer";
     error_ = handler_->UpdateSessionState(
         type_, cricket::CS_REMOTE,
         handler_->remote_description()->description(), bundle_groups_by_mid_);
@@ -986,6 +987,7 @@ class SdpOfferAnswerHandler::ImplicitCreateSessionDescriptionObserver
     }
     // DoSetLocalDescription() is a synchronous operation that invokes
     // `set_local_description_observer_` with the result.
+	RTC_LOG(LS_WARNING) << "### will DoSetLocalDescription";
     sdp_handler_->DoSetLocalDescription(
         std::move(desc), std::move(set_local_description_observer_));
     operation_complete_callback_();
@@ -1368,6 +1370,7 @@ void SdpOfferAnswerHandler::SetLocalDescription(
         }
         // SetSessionDescriptionObserverAdapter takes care of making sure the
         // `observer_refptr` is invoked in a posted message.
+		RTC_LOG(LS_WARNING) << "### will DoSetLocalDescription";
         this_weak_ptr->DoSetLocalDescription(
             std::move(desc),
             rtc::make_ref_counted<SetSessionDescriptionObserverAdapter>(
@@ -1400,6 +1403,7 @@ void SdpOfferAnswerHandler::SetLocalDescription(
           operations_chain_callback();
           return;
         }
+		RTC_LOG(LS_WARNING) << "### will DoSetLocalDescription yes";
         this_weak_ptr->DoSetLocalDescription(std::move(desc), observer);
         // DoSetLocalDescription() is implemented as a synchronous operation.
         // The `observer` will already have been informed that it completed, and
@@ -1612,6 +1616,7 @@ RTCError SdpOfferAnswerHandler::ApplyLocalDescription(
     RemoveUnusedChannels(local_description()->description());
   }
 
+  RTC_LOG(LS_WARNING) << "### will UpdateSessionState in sdp_offer_answer";
   error = UpdateSessionState(type, cricket::CS_LOCAL,
                              local_description()->description(),
                              bundle_groups_by_mid);
@@ -1828,6 +1833,7 @@ void SdpOfferAnswerHandler::ApplyRemoteDescription(
 
   // NOTE: Candidates allocation will be initiated only when
   // SetLocalDescription is called.
+  RTC_LOG(LS_WARNING) << "### will UpdateSessionState in sdp_offer_answer";
   if (!operation->UpdateSessionState())
     return;
 
@@ -2722,6 +2728,7 @@ RTCError SdpOfferAnswerHandler::UpdateSessionState(
 
   // Update internal objects according to the session description's media
   // descriptions.
+  RTC_LOG(LS_WARNING) << "### will PushdownMediaDescription in sdp_offer_answer, type: " << type;
   return PushdownMediaDescription(type, source, bundle_groups_by_mid);
 }
 
@@ -4557,6 +4564,7 @@ RTCError SdpOfferAnswerHandler::PushdownMediaDescription(
       std::string error;
       bool success =
           context_->worker_thread()->BlockingCall([&]() {
+				  RTC_LOG(LS_WARNING) << "### will SetLocalContent in sdp_offer_answer, type: " << type;
             return (source == cricket::CS_LOCAL)
                        ? entry.first->SetLocalContent(entry.second, type, error)
                        : entry.first->SetRemoteContent(entry.second, type,

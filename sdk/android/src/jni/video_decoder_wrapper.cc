@@ -51,6 +51,7 @@ VideoDecoderWrapper::VideoDecoderWrapper(JNIEnv* jni,
                                  // if the decoder provides frames.
 
 {
+	//RTC_LOG(LS_WARNING) << "### in new VideoDecoderWrapper in video_decoder_wrapper.cc implementation_name: （c2.qti.avc.decoder）" << JavaToStdString(jni,Java_VideoDecoder_getImplementationName(jni, decoder));
   decoder_thread_checker_.Detach();
 }
 
@@ -60,6 +61,7 @@ bool VideoDecoderWrapper::Configure(const Settings& settings) {
   RTC_DCHECK_RUN_ON(&decoder_thread_checker_);
   JNIEnv* jni = AttachCurrentThreadIfNeeded();
   decoder_settings_ = settings;
+  RTC_LOG(LS_WARNING) << "### Configure, codec_type(4): " << decoder_settings_.codec_type();
   return ConfigureInternal(jni);
 }
 
@@ -267,14 +269,25 @@ absl::optional<uint8_t> VideoDecoderWrapper::ParseQP(
 std::unique_ptr<VideoDecoder> JavaToNativeVideoDecoder(
     JNIEnv* jni,
     const JavaRef<jobject>& j_decoder) {
+	//RTC_LOG(LS_WARNING) << "### JavaToNativeVideoDecoder in video_decoder_wrapper.cc implementation_name: （c2.qti.avc.decoder）" << JavaToStdString(jni,Java_VideoDecoder_getImplementationName(jni, j_decoder));
+
   const jlong native_decoder =
       Java_VideoDecoder_createNativeVideoDecoder(jni, j_decoder);
   VideoDecoder* decoder;
   if (native_decoder == 0) {
+	  RTC_LOG(LS_WARNING) << "### JavaToNativeVideoDecoder";
     decoder = new VideoDecoderWrapper(jni, j_decoder);
   } else {
-    decoder = reinterpret_cast<VideoDecoder*>(native_decoder);
+	  RTC_LOG(LS_WARNING) << "### JavaToNativeVideoDecoder Yes";
+#if 1
+	  decoder = reinterpret_cast<VideoDecoder*>(native_decoder);
+	  RTC_LOG(LS_WARNING) << "### decoder->GetDecoderInfo().implementation_name: " 
+		  << decoder->GetDecoderInfo().implementation_name;
+#else // crash
+	  decoder = new VideoDecoderWrapper(jni, j_decoder);
+#endif
   }
+  RTC_LOG(LS_WARNING) << "### JavaToNativeVideoDecoder decoder->GetDecoderInfo().implementation_name " << decoder->GetDecoderInfo().implementation_name;
   return std::unique_ptr<VideoDecoder>(decoder);
 }
 

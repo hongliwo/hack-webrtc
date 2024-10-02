@@ -1410,6 +1410,7 @@ void PeerConnection::SetLocalDescription(
     std::unique_ptr<SessionDescriptionInterface> desc,
     rtc::scoped_refptr<SetLocalDescriptionObserverInterface> observer) {
   RTC_DCHECK_RUN_ON(signaling_thread());
+  RTC_LOG(LS_WARNING) << "### will SetLocalDescription in peer_connection.cc";
   sdp_handler_->SetLocalDescription(std::move(desc), observer);
 }
 
