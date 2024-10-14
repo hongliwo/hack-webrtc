@@ -339,6 +339,10 @@ absl::optional<H265SpsParser::SpsState> H265SpsParser::ParseSpsInternal(
 
   // num_short_term_ref_pic_sets: ue(v)
   sps.num_short_term_ref_pic_sets = reader.ReadExponentialGolomb();
+  if (sps.num_short_term_ref_pic_sets > 1) {
+    sps.num_short_term_ref_pic_sets = sps.num_short_term_ref_pic_sets > 1 ? 0 : sps.num_short_term_ref_pic_sets;
+    RTC_LOG(LS_WARNING) << "### sps.num_short_term_ref_pic_sets: " << sps.num_short_term_ref_pic_sets << ", this is error and force to 0";
+  }
   sps.short_term_ref_pic_set.resize(sps.num_short_term_ref_pic_sets);
   for (uint32_t st_rps_idx = 0; st_rps_idx < sps.num_short_term_ref_pic_sets;
        st_rps_idx++) {
