@@ -17,6 +17,17 @@ git apply ../../sdk/ffmpeg-others-build.diff
 
 rm -rf build.x64.linux
 
+$PY chromium/scripts/build_ffmpeg.py android arm-neon --branding Chrome -- \
+    --disable-asm \
+    --disable-encoders --enable-encoder=h264 --enable-encoder=hevc \
+	--disable-hwaccels --disable-bsfs --disable-devices --disable-filters \
+    --disable-protocols --enable-protocol=file \
+    --disable-parsers --enable-parser=mpegaudio --enable-parser=h264 --enable-parser=hevc \
+    --disable-demuxers --enable-demuxer=mov --enable-demuxer=mp3 --enable-demuxer=mpegts --enable-demuxer=h264 --enable-demuxer=hevc \
+    --disable-decoders --enable-decoder=mp3 --enable-decoder=aac --enable-decoder=h264 --enable-decoder=hevc \
+    --disable-muxers --enable-muxer=matroska \
+    --enable-swresample
+
 $PY chromium/scripts/build_ffmpeg.py android ia32 --branding Chrome -- \
     --disable-asm \
     --disable-encoders --enable-encoder=h264 --enable-encoder=hevc \
@@ -53,8 +64,6 @@ echo "*****************************************************************"
 ./chromium/scripts/generate_gn.py
 
 popd
-
-exit
 
 echo "buid debug version"
 
